@@ -1,0 +1,362 @@
+body{
+    margin: 0;
+    padding: 0;
+    background:url("fs.jpg");
+    background-size: cover;
+    background-position: center;
+    font-family: sans-serif;
+    /* background-color: green; */
+}
+.login-box1{
+    width: 320px;
+    height: 575px;
+    background: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    top: 50%;
+    left: 20%;
+
+    position: absolute;
+    transform: translate(-50%,-50%);
+    box-sizing: border-box;
+    padding: 70px 30px;
+}
+
+.login-box2{
+    width: 320px;
+    height: 575px;
+    background: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    top: 50%;
+    left: 50%;
+
+    position: absolute;
+    transform: translate(-50%,-50%);
+    box-sizing: border-box;
+    padding: 70px 30px;
+}
+
+.login-box3{
+    width: 320px;
+    height: 575px;
+    background: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    top: 50%;
+    left: 80%;
+
+    position: absolute;
+    transform: translate(-50%,-50%);
+    box-sizing: border-box;
+    padding: 70px 30px;
+}
+
+
+/* Allergies to dust
+Asthma
+Bronchitis
+Emphysema (Shortness of breath)
+Inflammation/swelling of respiratory tract
+Lung cancer
+Lung collapse
+Pneumonia */
+
+
+/* .login-box{
+    width: 320px;
+    height: 650px;
+    background: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    top: 50%;
+    left: 50%;
+    position: absolute;
+    transform: translate(-50%,-50%);
+    box-sizing: border-box;
+    padding: 70px 30px;
+} */
+.avatar{
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    position: absolute;
+    top: -50px;
+    left: calc(50% - 50px);
+}
+h1{
+    margin: 0;
+    padding: 0 0 20px;
+    text-align: center;
+    font-size: 22px;
+}
+.login-box1 p{
+    margin: 0;
+    padding: 0;
+    font-weight: bold;
+}
+.login-box1 input{
+    width: 100%;
+    margin-bottom: 20px;
+}
+.login-box1 input[type="text"], input[type="password"]
+{
+    border: none;
+    border-bottom: 1px solid #fff;
+    background: transparent;
+    outline: none;
+    height: 40px;
+    color: #fff;
+    font-size: 16px;
+}
+
+
+.login-box1 input[type="submit"]
+{
+    border: none;
+    outline: none;
+    height: 40px;
+    background: #1c8adb;
+    color: #fff;
+    font-size: 18px;
+    border-radius: 20px;
+    bottom: 50px;
+    top: 160px;
+
+
+}
+.login-box1 input[type="submit"]:hover
+{
+    cursor: pointer;
+    background: #39dc79;
+    color: #000;
+    /*padding-bottom: 150%;*/
+}
+
+.login-box1 a{
+    text-decoration: none;
+    font-size: 14px;
+    color: #fff;
+}
+.login-box1 a:hover
+{
+    color: #39dc79;
+}
+
+
+.login-box1 b{
+    text-decoration: none;
+    font-size: 14px;
+    color: #fff;
+}
+.login-box1 b:hover
+{
+    color: #39dc79;
+}
+
+
+
+
+
+/* login box 2 */
+
+
+
+
+
+
+
+.login-box2 p{
+    margin: 0;
+    padding: 0;
+    font-weight: bold;
+}
+.login-box2 input{
+    width: 100%;
+    margin-bottom: 20px;
+}
+.login-box2 input[type="text"], input[type="password"]
+{
+    border: none;
+    border-bottom: 1px solid #fff;
+    background: transparent;
+    outline: none;
+    height: 40px;
+    color: #fff;
+    font-size: 16px;
+}
+.login-box2 input[type="submit"]
+{
+    border: none;
+    outline: none;
+    height: 40px;
+    background: #1c8adb;
+    color: #fff;
+    font-size: 18px;
+    border-radius: 20px;
+}
+.login-box2 input[type="submit"]:hover
+{
+    cursor: pointer;
+    background: #39dc79;
+    color: #000;
+}
+
+.login-box2 a{
+    text-decoration: none;
+    font-size: 14px;
+    color: #fff;
+}
+.login-box2 a:hover
+{
+    color: #39dc79;
+}
+
+
+.login-box2 b{
+    text-decoration: none;
+    font-size: 14px;
+    color: #fff;
+}
+.login-box2 b:hover
+{
+    color: #39dc79;
+}
+
+
+/* Login box 3  */
+
+
+.login-box3 p{
+    margin: 0;
+    padding: 0;
+    font-weight: bold;
+}
+.login-box3 input{
+    width: 100%;
+    margin-bottom: 20px;
+}
+/* .login-box3 input[type="checkbox"], input[type="password"]
+{
+    border: none;
+    border-bottom: 1px solid #fff;
+    background: transparent;
+    outline: none;
+    height: 40px;
+    color: #fff;
+    font-size: 16px;
+} */
+.login-box3 input[type="checkbox"]
+{
+    border: none;
+    outline: none;
+    height: 20px;
+    background: #1c8adb;
+    color: #fff;
+    /*font-size: 18px;
+    border-radius: 20px;*/
+    left: 40%;
+    bottom: 50%;
+}
+
+label {
+  display: block;
+  padding-top: -100px;
+  padding-left: 105px;
+  text-indent: -0px;
+}
+input {
+  /* width: 13px;
+  height: 13px; */
+  /* padding: 0;
+  margin:0; */
+  /* vertical-align: bottom; */
+  position: relative;
+  top: -5px;
+  /* *overflow: hidden; */
+}
+
+.login-box3 input {
+  /* width: 13px;
+  height: 13px; */
+  /* padding: 0;
+  margin:0; */
+  /* vertical-align: bottom; */
+  position: relative;
+  top: 41px;*/
+  /* *overflow: hidden; */
+}
+
+.login-box3 input[type="submit"]
+{
+    border: none;
+    outline: none;
+    height: 40px;
+    background: #1c8adb;
+    color: #fff;
+    font-size: 18px;
+    border-radius: 20px;
+    left: 10px;
+
+
+}
+
+/* .login-box3 input[type="checkbox"]:hover
+{
+    cursor: pointer;
+    background: #39dc79;
+    color: #000;
+    left: 80%;
+} */
+
+/* .login-box3 a{
+    text-decoration: none;
+    font-size: 14px;
+    color: #fff;
+    left: 80%;
+} */
+/* .login-box3 a:hover
+{
+    color: #39dc79;
+    left: 80%;
+} */
+
+
+/* .login-box3 b{
+    text-decoration: none;
+    font-size: 14px;
+    color: #fff;
+    left: 80%;
+} */
+/* .login-box3 b:hover
+{
+    color: #39dc79;
+}
+
+.login-box3 b:hover
+{
+    color: #39dc79;
+} */
+
+
+.login-box3 label
+{text-align: left;
+padding top: 50%;}
+
+
+.submit1{
+    left: 50px;
+
+    top: 50px;
+}
+
+
+
+.login-box3 input[type="submit"]:hover
+{
+    cursor: pointer;
+    background: #39dc79;
+    color: #000;
+    /*padding-bottom: 150%;*/
+}
+
+.login-box3 a:hover
+{
+    color: #39dc79;
+}

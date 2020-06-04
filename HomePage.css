@@ -1,0 +1,106 @@
+body{
+    background-image: url("PollutX3.jpg");
+}
+
+.heading{
+    color: rgb(97, 29, 29);
+}
+
+.text{
+    color: white;
+    padding: 3px;
+}
+
+.question{
+    padding-left: 290px;
+}
+
+
+.X{
+    color: Green;
+}
+
+.box{
+    border: 2px solid green;
+    width: 800px;
+    height: 250px;
+    margin-left: 350px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    border-radius: 25px;
+}
+
+/* .button {
+  background-color: #f44336; /* Green
+  border: none;
+  color: #f44336;
+  bottom: 500px;
+   bottom: 170px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+    position: absolute;
+  font-size: 16px;
+  margin-left: 350px;
+  /* cursor: pointer;
+} */
+
+
+.button1{
+    margin-left: 350px;
+    display: inline-block;
+    bottom: 500px;
+    color: #00000;
+    background-color: #00000;
+    position: absolute;
+     bottom: 170px;
+    /* font-size: large; */
+    /* top: 10%; */
+     width: 500px;
+/* box-sizing: border-box; */
+}
+
+.button2{
+    margin-left: 350px;
+    display: inline-block;
+    /* top: 100px; */
+    position: absolute;
+    bottom: 170px;
+    right: 610px;
+}
+
+.button3{
+    display: inline-block;
+    margin-left: 270px;
+    position: absolute;
+    bottom: 170px;
+    right: 250px;
+    /* box-sizing: border-box; */
+}
+
+.pollut{
+    color: rgb(21,158,128);
+}
+
+.punchline{
+    color: red;
+    font-weight:bold;
+    font-style: italic;
+    padding-left: 200px;
+    padding-bottom: 10px;
+}
+
+.priority{
+    color: yellow;
+    font-weight:bold;
+    font-style: italic;
+    padding-left: 200px;
+    padding-bottom: 10px;
+}
+
+.center{
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+    display: block;
+}
