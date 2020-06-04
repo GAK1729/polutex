@@ -1,0 +1,31 @@
+<html>
+<head>
+    <title> polutex  </title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='readerLogin.css') }}">
+</head>
+    <body>
+    <div class="login-box">
+    <img src="{{ url_for('static', filename='SGhealth.png') }}" class="avatar">
+        <h1>Login Here</h1>
+            <form action="{{ url_for('loginAttempt') }}" method="post">
+            <p>Username</p>
+            <input type="text" name="username" placeholder="Enter Username">
+            <p>Password</p>
+            <input type="password" name="password" placeholder="Enter Password">
+            <input type="submit" name="submit" value="Login">
+            <br/><br/>
+            <div class="forget-password">
+            <a href="#" class="blue-text">Forgot Password?</a>
+          </div>
+            <br>
+            <div class="forget">
+            <a href="http://127.0.0.1:7000/SignUp" class="blue-text">Don't have an account? Sign up</a>
+          </div>
+            </form>
+            <c style="color:red;">{{wrong}}</c>
+
+
+        </div>
+
+    </body>
+</html>

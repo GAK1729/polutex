@@ -1,0 +1,88 @@
+
+<html>
+<head>
+    <title> Sign Up  </title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='signUp.css') }}"></head>
+    <body>
+    <div class="login-box1">
+    <img src="{{ url_for('static', filename='avatar.png') }}" class="avatar">
+        <h1>Sign Up</h1>
+            <form action="{{ url_for('newPolutexUser') }}" method="post">
+
+
+
+            <p>Name</p>
+            <input type="text" name="Name" placeholder="Enter Name">
+            <p>UserName</p>
+            <input type="text" name="username" placeholder="Enter Username">
+
+            <p>Password</p>
+            <input type="password" name="password" placeholder="Enter Password">
+
+            <p>Confim Password</p>
+            <input type="password" name="password" placeholder="Enter Password">
+
+            <p>Add Disease. Yes or No.</p>
+            <input type="text" name="disease_Bool" placeholder="Add Disease. Yes or No.">
+<a href="#polutexHome.html"><input type="submit1" value="Go To Login" style="padding-left: 75px;"></a>
+            <!-- <br><br><br><br><br><br><br><br><br><br> -->
+            <!-- <input type="submit" value="Go to login"> -->
+          <!-- </form> -->
+        </div>
+
+        <div class="login-box2">
+        <img src="{{ url_for('static', filename='avatar.png') }}" class="avatar">
+            <h1>User Details</h1>
+
+
+            <p>Age</p>
+            <input type="text" name="Age" placeholder="Enter Age">
+
+            <p>Gender</p>
+            <input type="text" name="Gender" placeholder="Enter Gender">
+
+            <p>Home Country</p>
+            <input type="text" name="Nationality" placeholder="Home Country">
+
+            <p>Phone Number</p>
+            <input type="text" name="Phone Number" placeholder="Enter Phone number">
+
+            <p>Emergency Contact Number</p>
+            <input type="text" name="Emergency Contact Number" placeholder="Enter Emergency Contact Number">
+
+            <p>Email</p>
+            <input type="text" name="Email" placeholder="Enter Email">
+
+            <br><br>
+            <input type="submit" value="Submit">
+            <br>
+            <!-- <input type="submit" value="Submit"> -->
+            <!-- <p>Health Condition</p>
+            <input type="text" name="Name" placeholder="health condition"> -->
+
+            <!-- <input type="submit" name="submit" value="Sign Up" > -->
+            <!-- </form> -->
+            </div>
+
+
+
+
+              <!-- <div>
+  <label><input type="checkbox" /> Label text</label>
+</div> -->
+    </form>
+            </form>
+            <!-- <input type="submit" value="Submit"> -->
+          </div>
+         <!--  <div class="login">
+                        <input type="submit" value="Go to login"> -->
+
+          </div>
+<!-- <div class="submit1">
+   <input type="submit" value="Submit">
+</div> -->
+
+        <!-- </div> -->
+
+    </body>
+</html>

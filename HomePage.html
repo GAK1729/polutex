@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+      <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='HomePage.css') }}">
+       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    </head>
+    <body>
+        <div class="HomePage_main">
+            <!-- <img src="{{ url_for('static', filename='PollutX2.jpg') }}" width="100" height="200" class="center"/> -->
+            <!-- <img src="PollutX2.jpg" width="100" height="200" class="center"/> -->
+            <!-- <div class="box">
+            <h3 class="question"><span class="pollut">What is Pollut</span> <span class="X">X</span>?</h3>
+            <h4 class="text">Pollut X is the most reliable and trustworthy source for air quality data that enables individuals to make better health decisions based on the air pollution levels at their specific location and individual sensitivities.
+            <br><span class="priority">YOUR HEALTH IS OUR PRIORTY</span>
+            <br><br><span class="punchline">"No one knows pollution like us"</span></h4>
+            </div> -->
+            <div class="button1">
+                <button type="button" style="width:200px;" style="font-size:1200px;"class="btn btn-danger" onclick="window.location.href = '{{ url_for('polutexHome') }}';">Sign In</button></div>
+            <div class="button2">
+                <button type="button" style="width:200px;"class="btn btn-danger " onclick="window.location.href = '{{ url_for('signUp') }}';">Sign Up</button></div>
+            <div class="button3">
+                <button type="button" style="width:200px;"class="btn btn-danger" onclick="window.location.href = '{{ url_for('guestDashboard') }}';">Continue as Guest</button></div>
+          </div>
+    </body>
+</html>

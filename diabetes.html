@@ -1,0 +1,169 @@
+
+<html>
+<head>
+    <title> polutex  </title>
+    <link rel="stylesheet" type="text/css" href="/static/diabetes.css">
+<style>
+.login-box input[type="submit"]
+{
+    border: none;
+    outline: none;
+    height: 40px;
+    background: #1c8adb;
+    color: #fff;
+    font-size: 18px;
+    border-radius: 20px;
+}
+.login-box input[type="submit"]:hover
+{
+    cursor: pointer;
+    background: #39dc79;
+    color: #000;
+}
+</style>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+
+</head>
+    <body>
+      <script>
+      window.onload = function () {
+    document.getElementById('popup1').click()
+}
+
+      // document.getElementById('popup1').click()
+
+      // window.onload=function(){
+      //   document.getElementById("popup1").click();
+      // };
+      // alert("Dont Open Diabetes Page again. \nStill under Construction. \nDont change any code related to this page. \nUse navbar to move to some other page.")
+      </script>
+
+      <!-- <script>
+        document.addEventListener('DOMContentLoaded', )
+        alert("hello")
+      </script> -->
+
+
+          <div class="topnav" id="myTopnav">
+            <a href="/dashboard" method="get">Dashboard</a>
+            <a href="/PSI" method="get" >PSI</a>
+            <a href="/PM25" method="get" >PM2.5</a>
+            <a href="/covid19" method="get" >COVID 19</a>
+            <a href="/dengue" method="get" >Dengue</a>
+            <a href="/diabetes" method="get" class="active" >Diabetes</a>
+            <a href="/profile/" method="get">Profile</a>
+            <a href="/settings" method="get">UV</a>
+            <a href="/" method="get">Log Out</a>
+          <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+            <i class="fa fa-bars"></i>
+          </a>
+          </div>
+
+    <div class="login-box">
+    <img src="/static/avatar.png" class="avatar">
+        <h1>Diabetes Predictor</h1>
+            <form action="/diabetes" method="post">
+
+            <p>Enter your Blood Glucose Level (mg/DL):</p>
+            <br>
+            <input type="text" name="Glucose" placeholder="Enter Value">
+            <br>
+            <p>Enter your Blood Pressure (mmHg):</p>
+            <br>
+            <input type="text" name="BloodPressure" placeholder="Enter Value">
+            <br>
+            <p>Enter your Skin Thickness (mm):</p>
+            <br>
+            <input type="text" name="SkinThickness" placeholder="Enter Value">
+            <br>
+            <p>Enter your Insulin Level (mg/DL):</p>
+            <br>
+            <input type="text" name="Insulin" placeholder="Enter Value">
+            <br>
+            <p>Enter your BMI:</p>
+            <input type="text" name="BMI" placeholder="Enter Value">
+            <input type="submit" name="submit" value="Predict">
+            <!-- <input class="button" type="submit" name="submit" value="Submit"> -->
+
+       <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+       <script src="http://www.jacklmoore.com/colorbox/jquery.colorbox.js"></script>
+       <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+       <script>
+         function openColorBox(){
+           $.colorbox({iframe:true, width:"80%", height:"80%", href: "http://www.sitepoint.com"});
+         }
+
+         function countDown(){
+           seconds--
+           $("popup1").text(seconds);
+           if (seconds === 0 && {{show_alert}} == 1){
+             // openColorBox();
+             // alert("hello")
+             Swal.fire({
+               title: "{{risk_percentage}}",
+               text: "{{diabetes_advice}}",
+               icon: 'success',
+               showCancelButton: true,
+               showLoaderOnConfirm: true,
+               preConfirm: function() {
+                 return new Promise(function(resolve, reject) {
+                   // here should be AJAX request
+                   setTimeout(function() {
+                     resolve();
+                   }, 1000);
+                 });
+               },
+             }).then(function() {
+               Swal.fire('Stay safe !!!');
+             });
+
+             // swal("Here's a message!", "It's pretty, isn't it?");
+             clearInterval(i);
+           }
+         }
+
+         var seconds = 1,
+             i = setInterval(countDown, 1000);
+       </script>
+<!-- <div class="box">
+   <a class="button" href="#popup1">Predict</a>
+</div>
+
+<div id="popup1" class="overlay">
+   <div class="popup">
+       <br>
+       <h2>Here i am</h2>
+        <br>
+        <h3>hello</h3>
+       <a class="close" href="#">&times;</a>
+       <div class="content">
+           Thank to pop me out of that button, but now i'm done so you can close this window.
+       </div>
+   </div>
+</div> -->
+
+
+           <!-- <input type="submit" name="submit" value="Predict"> -->
+
+          <!--  <a href="#">Forget Password</a>
+           <br />
+           <br />
+           <a href="http://127.0.0.1:7000/SignUp">Sign up</a>
+           </form> -->
+           <script>
+
+           </script>
+
+
+
+   </body>
+
+
+</html>
+
+<!-- if(0 == 1)
+{
+ alert("hello")
+} -->

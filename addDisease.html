@@ -1,0 +1,26 @@
+<html>
+<head>
+    <title> polutex  </title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='addDisease.css') }}">
+</head>
+    <body>
+  <div class="login-box3">
+
+    <img src="{{ url_for('static', filename='avatar.png') }}" class="avatar">
+    <h1>Health Condition</h1>
+
+      <form method="post" action="{{ url_for('addDisease') }}" >
+        <input type="checkbox" name="mycheckbox" value="Allergies to dust">Allergies to dust
+        <input type="checkbox" name="mycheckbox" value="Asthma">Asthma
+        <input type="checkbox" name="mycheckbox" value="Bronchitis">Bronchitis
+        <input type="checkbox" name="mycheckbox" value="Lung cancer">Lung cancer
+        <input type="checkbox" name="mycheckbox" value="Lung collapse">Lung collapse
+        <input type="checkbox" name="mycheckbox" value="Respiratory inflammation">respiratory Inflammation
+        <input type="checkbox" name="mycheckbox" value="Pneumonia">Pneumonia
+        <input type="submit" name="submit" value="Submit">
+      </form>
+      <p style="color:red;">{{message}}</p>
+
+  </div>
+    </body>
+</html>

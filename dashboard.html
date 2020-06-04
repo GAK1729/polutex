@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<title>Dashboard</title>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard.css') }}">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+<script src='https://kit.fontawesome.com/a076d05399.js'></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+  body,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: "Lato", sans-serif
+  }
+
+  .w3-bar,
+  h1,
+  button {
+    font-family: "Montserrat", sans-serif
+  }
+
+  .fa-anchor,
+  .fa-coffee {
+    font-size: 200px
+  }
+</style>
+
+<body>
+
+  <!-- Navbar -->
+  <div class="topnav" id="myTopnav">
+      <a href="{{ url_for('dashboard')}}" class="active" method="get">Dashboard</a>
+      <a href="{{ url_for('PSI')}}" method="get">PSI</a>
+      <a href="{{ url_for('PM25')}}" method="get">PM2.5</a>
+      <a href="{{ url_for('covid19')}}" method="get">COVID 19</a>
+      <a href="{{ url_for('dengue')}}" method="get">Dengue</a>
+      <a href="{{ url_for('diabetes')}}" method="get">Diabetes</a>
+      <a href="{{ url_for('userProfile') }}" method="get">Profile</a>
+      <a href="{{ url_for('settings')}}" method="get">UV</a>
+      <a href="{{ url_for('logOut')}}" method="get">Log Out</a>
+      <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+        <i class="fa fa-bars"></i>
+      </a>
+      </div>
+
+
+    <!-- Navbar on small screens -->
+    <div id="navDemo" class="w3-bar-block w3-white w3-hide w3-hide-large w3-hide-medium w3-large">
+      <a href="#" class="w3-bar-item w3-button w3-padding-large">Link 1</a>
+      <a href="#" class="w3-bar-item w3-button w3-padding-large">Link 2</a>
+      <a href="#" class="w3-bar-item w3-button w3-padding-large">Link 3</a>
+      <a href="#" class="w3-bar-item w3-button w3-padding-large">Link 4</a>
+    </div>
+  </div>
+
+  <!-- Image Header -->
+  <div class="w3-display-container w3-animate-opacity">
+    <img src="{{ url_for('static', filename='fs.jpg') }}" alt="boat" style="width:100%;min-height:350px;max-height:600px;">
+    <div class="w3-display-middle w3-text-white ">
+      <h1 align="center" class="w3-margin w3-jumbo">Welcome</h1>
+      <h1 align="center" class="w3-margin w3-jumbo">{{nameT}}</h1>
+      <p class="w3-xlarge">Without health, Life is almost dead! A healthy body holds a Healthy Soul & mind!</p>
+      <!-- <button class="w3-button w3-white w3-padding-large w3-large w3-margin-top w3-opacity w3-hover-opacity-off">Get
+        Started</button> -->
+        <button class="w3-button w3-white w3-padding-large w3-large w3-margin-top w3-opacity w3-hover-opacity-off" style="margin-left: 290px;"><a href="https://www.youtube.com/watch?v=c06dTj0v0sM" target="_blank"><i class="far fa-play-circle fa-align-left" ></i><b>      Healthy lifestyle</b></a></button>
+
+    </div>
+  </div>
+
+  <!-- Main Features -->
+
+  <div class="w3-container w3-black w3-center w3-opacity w3-padding-48">
+    <h1 class="w3-margin w3-xlarge">Our Features</h1>
+  </div>
+
+  <div class="w3-row-padding w3-center w3-margin-top">
+    <div class="w3-third">
+      <div class="w3-card w3-container w3-text-green" style="min-height:460px">
+        <h3 style="colour:white; font-size:35px;"><b>Pollutants(Location Search)</b></h3><br>
+        <i class="fas fa-seedling" style="font-size:120px"></i>
+        <p class="w3-margin w3-xlarge">Pollution Standard Index</p>
+        <p class="w3-margin w3-xlarge">PM.25</p>
+        <p class="w3-margin w3-xlarge">Ultraviolet Index</p>
+        <!-- <p class="w3-margin w3-xlarge">Search based on Location</p> -->
+      </div>
+    </div>
+
+    <div class="w3-third">
+      <div class="w3-card w3-container w3-text-blue" style="min-height:460px">
+        <h3 style="colour:white; font-size:35px;"><b>Disease Tracker</b></h3><br>
+        <i class="fas fa-virus" style="font-size:120px"></i>
+        <br>
+        <p class="w3-margin w3-xlarge">COVID-19</p>
+
+        <p class="w3-margin w3-xlarge">DENGUE</p>
+
+
+      </div>
+    </div>
+
+    <div class="w3-third">
+      <div class="w3-text-red w3-card w3-container" style="min-height:460px">
+        <h3 style="colour:white; font-size:35px;"><b>Predictor</b></h3><br>
+        <i class="fas fa-heartbeat" style="font-size:120px"></i>
+        <p class="w3-margin w3-xlarge">DIABETES</p>
+        <p class="w3-margin w3-xlarge">PM2.5</p>
+        <p class="w3-margin w3-xlarge">PSI</p>
+        <p class="w3-margin w3-xlarge">UV INDEX</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="w3-container w3-black w3-center w3-opacity w3-padding-64">
+    <h1 class="w3-margin w3-xlarge">"It is health that is real wealth and not pieces of gold and silver"</h1>
+    <h2 class="w3-margin w3-xlarge">- Mahatma Gandhi</h1>
+      <!-- <i class="fa fa-facebook-official w3-hover-opacity"></i>
+      <i class="fa fa-instagram w3-hover-opacity"></i>
+      <i class="fa fa-twitter w3-hover-opacity"></i>
+      <i class="fa fa-linkedin w3-hover-opacity"></i> -->
+  </div>
+
+  <!-- Footer -->
+  <!-- <footer class="w3-container w3-padding-64 w3-center w3-opacity">
+    <div class="w3-xlarge w3-padding-32">
+      <i class="fa fa-facebook-official w3-hover-opacity"></i>
+      <i class="fa fa-instagram w3-hover-opacity"></i>
+      <i class="fa fa-twitter w3-hover-opacity"></i>
+      <i class="fa fa-linkedin w3-hover-opacity"></i>
+    </div>
+  </footer> -->
+
+  <script>
+    // Used to toggle the menu on small screens when clicking on the menu button
+    function myFunction() {
+      var x = document.getElementById("navDemo");
+      if (x.className.indexOf("w3-show") == -1) {
+        x.className += " w3-show";
+      } else {
+        x.className = x.className.replace(" w3-show", "");
+      }
+    }
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html>
+<head>
+<!-- <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='heatMap.css') }}"> -->
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+.container
+{
+  max-width: 960px;
+  margin:auto;0 auto;
+  background: #f9f9f9;
+  font-size: 24px;
+  padding-left: 25px;
+  position: absolute;
+  top: 80%;
+  right: 0;
+  top: 0;
+
+}
+
+.parrallax
+{
+  /* background: url("backImage3.jpg") no-repeat center; */
+  background-size: cover;
+  background-attachment: fixed;
+  height: 500px;
+}
+
+.topnav {
+  overflow: hidden;
+  background-color: #333;
+}
+
+.topnav a {
+  float: left;
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.topnav a.active {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.topnav .icon {
+  display: none;
+}
+
+@media screen and (max-width: 600px) {
+  .topnav a:not(:first-child) {display: none;}
+  .topnav a.icon {
+    float: right;
+    display: block;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .topnav.responsive {position: relative;}
+  .topnav.responsive .icon {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  .topnav.responsive a {
+    float: none;
+    display: block;
+    text-align: left;
+  }
+}
+</style>
+
+
+
+
+
+<meta charset="utf-8" />
+<title>Pollutex PSI</title>
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+<script src="https://api.mapbox.com/mapbox-gl-js/v1.9.0/mapbox-gl.js"></script>
+<link href="https://api.mapbox.com/mapbox-gl-js/v1.9.0/mapbox-gl.css" rel="stylesheet" />
+<style>
+	body { margin: 0; padding: 0; }
+  /* #map { position: absolute; top: 0; bottom: 0; width: 100%; } */
+	#map { position: absolute; top: 5%; bottom: 0%; left: 0%; right: 0%; width: 100%; }
+</style>
+</head>
+<body style="background-color:black;">
+<div class="container">
+  <div class="parallax">
+  </div>
+
+</div>
+  <div class="topnav" id="myTopnav">
+    <a href="{{ url_for('dashboard')}}" method="get">Dashboard</a>
+    <a href="{{ url_for('PSI')}}" method="get" >PSI</a>
+    <a href="{{ url_for('PM25')}}" method="get" >PM2.5</a>
+    <a href="{{ url_for('covid19')}}" method="get" >COVID 19</a>
+    <a href="{{ url_for('dengue')}}" method="get" class="active" >Dengue</a>
+    <a href="{{ url_for('diabetes')}}" method="get" >Diabetes</a>
+    <a href="{{ url_for('userProfile') }}" method="get">Profile</a>
+    <a href="{{ url_for('settings')}}" method="get">UV</a>
+    <a href="{{ url_for('logOut')}}" method="get">Log Out</a>
+  <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+    <i class="fa fa-bars"></i>
+  </a>
+</div>
+
+<!-- <div style="padding-left:16px">
+  <h2>Responsive Topnav Example</h2>
+  <p>Resize the browser window to see how it works.</p>
+</div> -->
+
+<script>
+function myFunction() {
+  var x = document.getElementById("myTopnav");
+  if (x.className === "topnav") {
+    x.className += " responsive";
+  } else {
+    x.className = "topnav";
+  }
+}
+</script>
+
+<div id="map"></div>
+
+<script>
+	// mapboxgl.accessToken = 'pk.eyJ1IjoiZ2FrNGciLCJhIjoiY2s4azdtbHRqMGh2MzNtcDViZzg0NGJmYyJ9.XD-qRevct5D6PNd6KPfdAg';
+
+  mapboxgl.accessToken = 'pk.eyJ1IjoiZ2FrNGciLCJhIjoiY2s4bHN5Y3RuMDlkdTNmbzJpdTZlM2F6ZSJ9.fYFpRiVxmvEusGBU8dWI6Q';
+    var map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/dark-v10',
+        center: [103.8198, 1.3521],
+        // center: [-120, 50],
+        zoom: 10
+        // zoom: 2
+    });
+    var magnitude  = 10;
+    var south_magnitude  = 20;
+    var east_magnitude  = 30;
+    var west_magnitude  = 40;
+    var central_magnitude  = 50;
+
+    map.on('load', function() {
+        // Add a geojson point source.
+        // Heatmap layers also work with a vector tile source.
+        map.addSource('earthquakes', {
+            'type': 'geojson',
+            'data':
+            {
+"type": "FeatureCollection",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features":
+  [{'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.7964217, 1.4482327, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_2', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.6874919, 1.3385415, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_3', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.7504872, 1.3710854, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_4', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.6971781, 1.3515992, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.8871901, 1.3588907, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.8697353, 1.3648203, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.8512773, 1.367973, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.8359564, 1.3679729, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.8601243, 1.352872, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.8834199, 1.3123989, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.8804236, 1.3126235, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.8807597, 1.3128814, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.8451694, 1.3636049, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.9024733, 1.38665, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.7612289, 1.35926, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.7664352, 1.3445899, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.8674164, 1.3377109, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.7674671, 1.367832, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.8264667, 1.4293926, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.8290234, 1.3704966, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.8800356, 1.3682892, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.7945789, 1.4354763, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.8293919, 1.3685541, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.89862, 1.328164, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.7883536, 1.444782, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.8791338, 1.372473, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.8290234, 1.3704966, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.8713093, 1.3988911, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.8274482, 1.3626655, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.880688, 1.3608798, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.8500074, 1.3405133, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.9535593, 1.353233, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.843757, 1.3674265, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.9042493, 1.31853, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.8710217, 1.3563478, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.7658231, 1.3597382, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.8474031, 1.3414983, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.7717619, 1.3770833, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.7685521, 1.3422432, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.74784, 1.4023938, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.9092274, 1.3948539, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.8787833, 1.3605557, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.8386141, 1.3049028, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.8850821, 1.3725285, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.8786701, 1.3723917, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.6968549, 1.3475921, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.8133921, 1.4496188, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.845546, 1.3683501, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.8512092, 1.3707241, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.8704585, 1.3609691, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.8895482, 1.3013538, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.7396482, 1.3926881, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.7696773, 1.3650837, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.9033909, 1.3061049, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.885583, 1.3156086, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.9089042, 1.324146, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.8430323, 1.340041, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.8618175, 1.3834412, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.7932659, 1.4286225, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.8325653, 1.41916, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.8852961, 1.3291483, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.9326488, 1.3221825, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.7580044, 1.3493256, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.7456902, 1.36463, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.7498929, 1.3648491, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.8811733, 1.309528, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.901735, 1.3162591, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.8743778, 1.3928182, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.8758763, 1.377495, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.7653803, 1.3551457, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.8761922, 1.3165098, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.9386645, 1.3175152, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.9071178, 1.3023525, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.9583031, 1.3644804, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.8588971, 1.4157969, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.9515944, 1.3626164, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.765267, 1.3407373, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.9011374, 1.3748577, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.8375974, 1.3755222, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.9360933, 1.3360637, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.8583429, 1.3150044, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.8376444, 1.2759292, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.8943493, 1.381375, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.8954793, 1.392383, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.8499989, 1.3139435, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.9059118, 1.333823, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.9154851, 1.3216236, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.7005293, 1.3397592, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.9019719, 1.3366588, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.7537387, 1.4306891, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.9061053, 1.3071827, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.8595477, 1.3839856, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.8741582, 1.3113356, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.8601537, 1.3266943, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.8554361, 1.3129873, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.8820794, 1.3226178, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.8640946, 1.335125, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.8668908, 1.3816684, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_1', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.8684887, 1.3551231, 0.0]}},
+  {'type': 'Feature', 'properties': {'id': 'Dengue_coord_n', 'mag': magnitude}, 'geometry': {'type': 'Point', 'coordinates': [103.8304573, 1.362765, 0.0]}}
+  ]
+}
+
+        });
+
+        map.addLayer(
+            {
+                'id': 'earthquakes-heat',
+                'type': 'heatmap',
+                'source': 'earthquakes',
+                'maxzoom': 9,
+                'paint': {
+                    // Increase the heatmap weight based on frequency and property magnitude
+                    'heatmap-weight': [
+                        'interpolate',
+                        ['linear'],
+                        ['get', 'mag'],
+                        0,
+                        0,
+                        6,
+                        1
+                    ],
+                    // Increase the heatmap color weight weight by zoom level
+                    // heatmap-intensity is a multiplier on top of heatmap-weight
+                    'heatmap-intensity': [
+                        'interpolate',
+                        ['linear'],
+                        ['zoom'],
+                        0,
+                        1,
+                        9,
+                        3
+                    ],
+                    // Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
+                    // Begin color ramp at 0-stop with a 0-transparancy color
+                    // to create a blur-like effect.
+                    'heatmap-color': [
+                        'interpolate',
+                        ['linear'],
+                        ['heatmap-density'],
+                        0,
+                        'rgba(33,102,172,0)',
+                        0.2,
+                        'rgb(103,169,207)',
+                        0.4,
+                        'rgb(209,229,240)',
+                        0.6,
+                        'rgb(253,219,199)',
+                        0.8,
+                        'rgb(239,138,98)',
+                        1,
+                        'rgb(178,24,43)'
+                    ],
+                    // Adjust the heatmap radius by zoom level
+                    'heatmap-radius': [
+                        'interpolate',
+                        ['linear'],
+                        ['zoom'],
+                        0,
+                        2,
+                        9,
+                        20
+                    ],
+                    // Transition from heatmap to circle layer by zoom level
+                    'heatmap-opacity': [
+                        'interpolate',
+                        ['linear'],
+                        ['zoom'],
+                        7,
+                        1,
+                        9,
+                        0
+                    ]
+                }
+            },
+            'waterway-label'
+        );
+
+        map.addLayer(
+            {
+                'id': 'earthquakes-point',
+                'type': 'circle',
+                // 'type': 'square',
+                'source': 'earthquakes',
+                'minzoom': 7,
+                'paint': {
+                    // Size circle radius by earthquake magnitude and zoom level
+                    'circle-radius': [
+                        'interpolate',
+                        ['linear'],
+                        ['zoom'],
+                        8, // negetive relation to circle radius
+                        // 7,
+                        ['interpolate', ['linear'], ['get', 'mag'], 1, 1, 6, 4],
+                        16,
+                        ['interpolate', ['linear'], ['get', 'mag'], 1, 5, 6, 50]
+                    ],
+                    // Color circle by earthquake magnitude
+                    // 'circle-color': [
+                    //     'interpolate',
+                    //     ['linear'],
+                    //     ['get', 'mag'],
+                    //     1,
+                    //     'rgba(33,102,172,0)',
+                    //     2,
+                    //     'rgb(103,169,207)',
+                    //     3,
+                    //     'rgb(209,229,240)',
+                    //     4,
+                    //     'rgb(253,219,199)',
+                    //     5,
+                    //     'rgb(239,138,98)',
+                    //     6,
+                    //     'rgb(178,24,43)'
+                    // ],
+                    // Color circle by earthquake magnitude
+                    'circle-color': [
+                        'interpolate',
+                        ['linear'],
+                        ['get', 'mag'],
+                        15,
+                        'rgb(0,250,0)',
+                        25,
+                        'rgb(50,200,0)',
+                        35,
+                        'rgb(100,150,0)',
+                        45,
+                        'rgb(255,0,0)',
+                        // 55,
+                        // 'rgb(200,50,0)',
+                        // 65,
+                        // 'rgb(255,0,0)'
+                    ],
+                    'circle-stroke-color': 'white',
+                    'circle-stroke-width': 0,
+                    // Transition from heatmap to circle layer by zoom level
+                    'circle-opacity': [
+                        'interpolate',
+                        ['linear'],
+                        ['zoom'],
+                        0.7,
+                        0.5,
+                        0.8,
+                        0.5
+                    ]
+                },
+                "heatmap-color": {
+                    "stops": [
+                        [20, "blue"],
+                        [40, "yellow"],
+                        [60, "red"]
+                    ]
+                              }
+            },
+            'waterway-label'
+        );
+    });
+
+
+
+
+</script>
+
+<div container>
+<p>
+  No one know pultex
+</p>
+</div>
+
+</body>
+</html>

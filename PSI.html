@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='PSI.css') }}">
+    <meta charset="utf-8">
+    <title>Heatmaps</title>
+    <style>
+
+
+    </style>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+  </head>
+
+  <!-- <body  style="background-color:silver"> -->
+  <body>
+
+
+  <!-- </div> -->
+<div class="topnav" id="myTopnav">
+  <a href="{{ url_for('dashboard')}}" method="get">Dashboard</a>
+  <a href="{{ url_for('PSI')}}" method="get" class="active" >PSI</a>
+  <a href="{{ url_for('PM25')}}" method="get" >PM2.5</a>
+  <a href="{{ url_for('covid19')}}" method="get">COVID 19</a>
+  <a href="{{ url_for('dengue')}}" method="get">Dengue</a>
+  <a href="{{ url_for('diabetes')}}" method="get" >Diabetes</a>
+  <a href="{{ url_for('userProfile') }}" method="get">Profile</a>
+  <a href="{{ url_for('settings')}}" method="get">UV</a>
+  <a href="{{ url_for('logOut')}}" method="get">Log Out</a>
+<a href="javascript:void(0);" class="icon" onclick="myFunction()">
+  <i class="fa fa-bars"></i>
+</a>
+</div>
+<!-- <h2>Responsive Topnav Example</h2>
+  <p>Resize the browser window to see how it works.</p> -->
+<!-- </div> -->
+<h1 style="text-align: center; color: white; font-size: 50px;">PSI Predictor</h1>
+<script>
+
+function myFunction() {
+  var x = document.getElementById("myTopnav");
+  if (x.className === "topnav") {
+    x.className += " responsive";
+  } else {
+    x.className = "topnav";
+  }
+}
+</script>
+
+    <div id="floating-panel">
+      <button onclick="toggleHeatmap()">Toggle Heatmap</button>
+      <button onclick="changeGradient()">Change gradient</button>
+      <button onclick="changeRadius()">Change radius</button>
+      <button onclick="changeOpacity()">Change opacity</button>
+    </div>
+    <div id="map"></div>
+
+
+    <script>
+////////////////////////////////////////////////////////////////////////////////////////
+// qwe
+    document.addEventListener('DOMContentLoaded', () => {
+
+        document.querySelector('#form').onsubmit = () => {
+
+            // Initialize new request
+            const request = new XMLHttpRequest();
+            const currency = document.querySelector('#currency').value;
+            request.open('POST', '/convert');
+
+            // Callback function for when request completes
+            request.onload = () => {
+
+                // Extract JSON data from request
+                const data = JSON.parse(request.responseText);
+
+                // Update the result div
+                if (data.success) {
+                    const contents = `1 USD is equal to ${data.rate} ${currency}.`
+                    document.querySelector('#result').innerHTML = contents;
+                }
+                else {
+                    document.querySelector('#result').innerHTML = 'There was an error.';
+                }
+            }
+
+            // Add data to send with request
+            const data = new FormData();
+            data.append('currency', currency);
+
+            // Send request
+            request.send(data);
+            return false;
+        };
+
+    });
+
+////////////////////////////////////////////////////////////////////////////////////////
+      // This example requires the Visualization library. Include the libraries=visualization
+      // parameter when you first load the API. For example:
+      // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=visualization">
+
+      var map, heatmap;
+
+      function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 11, //13
+          center: {lat: 1.3521, lng: 103.8198},
+          mapTypeId: 'roadmap'
+          // mapTypeId: 'hybrid'/roadmap/hybrid/terrain
+          // https://developers.google.com/maps/documentation/javascript/maptypes
+        });
+
+        heatmap = new google.maps.visualization.HeatmapLayer({
+          data: getPoints(),
+          map: map,
+          radius: 40 // To set heat map default radius
+        });
+      }
+
+      function toggleHeatmap() {
+        heatmap.setMap(heatmap.getMap() ? null : map);
+      }
+
+      function changeGradient() {
+        var gradient = [
+          'rgba(0, 255, 255, 0)',
+          'rgba(0, 255, 255, 1)',
+          'rgba(0, 191, 255, 1)',
+          'rgba(0, 127, 255, 1)',
+          'rgba(0, 63, 255, 1)',
+          'rgba(0, 0, 255, 1)',
+          'rgba(0, 0, 223, 1)',
+          'rgba(0, 0, 191, 1)',
+          'rgba(0, 0, 159, 1)',
+          'rgba(0, 0, 127, 1)',
+          'rgba(63, 0, 91, 1)',
+          'rgba(127, 0, 63, 1)',
+          'rgba(191, 0, 31, 1)',
+          'rgba(255, 0, 0, 1)'
+        ]
+        heatmap.set('gradient', heatmap.get('gradient') ? null : gradient);
+      }
+
+      function changeRadius() {
+        heatmap.set('radius', heatmap.get('radius') ? 40 : 30);
+        // heatmap.set('radius', heatmap.get('radius') ? null : 20);
+      }
+
+      function changeOpacity() {
+        heatmap.set('opacity', heatmap.get('opacity') ? null : 0.2);
+      }
+
+
+
+      // Heatmap data: 101 Points
+      function getPoints() {
+
+        if( {{show_mag}} < 9)
+        {
+        var north_weight = 10;
+        var south_weight = 10;
+        var east_weight =10;
+        var west_weight = 10;
+        var central_weight = 10;
+
+        return [
+          {location: new google.maps.LatLng(8.7832, ), weight: north_weight},
+          {location: new google.maps.LatLng(8.7832, 34.5085), weight: central_weight}
+          // new google.maps.LatLng(1.375766, 104.860922)
+        ];
+
+        }
+        else
+        {
+        var north_weight = {{ north_mag }};
+        var south_weight = {{ south_mag }};
+        var east_weight = {{ east_mag }};
+        var west_weight = {{ west_mag }};
+        var central_weight = {{ central_mag }};
+
+        return [
+          {location: new google.maps.LatLng(1.424560, 103.760863), weight: north_weight},
+          {location: new google.maps.LatLng(1.430523, 103.755498), weight: north_weight},
+          {location: new google.maps.LatLng(1.434338, 103.762007), weight: north_weight},
+          {location: new google.maps.LatLng(1.436529, 103.748516), weight: north_weight},
+          {location: new google.maps.LatLng(1.425032, 103.770488), weight: north_weight},
+          {location: new google.maps.LatLng(1.434384, 103.769287), weight: north_weight},
+          {location: new google.maps.LatLng(1.441632, 103.772173), weight: north_weight},
+          {location: new google.maps.LatLng(1.434927, 103.787371), weight: north_weight},
+          {location: new google.maps.LatLng(1.430937, 103.801018), weight: north_weight},
+          {location: new google.maps.LatLng(1.428617, 103.803335), weight: north_weight},
+          {location: new google.maps.LatLng(1.452599, 103.799730), weight: north_weight},
+          {location: new google.maps.LatLng(1.446636, 103.803936), weight: north_weight},
+          {location: new google.maps.LatLng(1.375766, 103.860922), weight: north_weight},
+          {location: new google.maps.LatLng(1.375245, 103.878644), weight: north_weight},
+          {location: new google.maps.LatLng(1.442483, 103.819303), weight: north_weight},
+          {location: new google.maps.LatLng(1.413243, 103.897581), weight: north_weight},
+          {location: new google.maps.LatLng(1.429717, 103.857412), weight: north_weight},
+          {location: new google.maps.LatLng(1.456488, 103.821363), weight: north_weight},
+          {location: new google.maps.LatLng(1.432120, 103.796987), weight: north_weight},
+          {location: new google.maps.LatLng(1.416332, 103.827543), weight: north_weight},
+
+          {location: new google.maps.LatLng(1.310628, 103.840542), weight: south_weight},
+          {location: new google.maps.LatLng(1.322984, 103.803464), weight: south_weight},
+          {location: new google.maps.LatLng(1.316634, 103.825865), weight: south_weight},
+          {location: new google.maps.LatLng(1.312687, 103.791791), weight: south_weight},
+          {location: new google.maps.LatLng(1.312859, 103.808098), weight: south_weight},
+          {location: new google.maps.LatLng(1.310628, 103.827324), weight: south_weight},
+          {location: new google.maps.LatLng(1.305200, 103.850842), weight: south_weight},
+          {location: new google.maps.LatLng(1.299508, 103.858395), weight: south_weight},
+          {location: new google.maps.LatLng(1.296505, 103.870755), weight: south_weight},
+          {location: new google.maps.LatLng(1.299471, 103.899615), weight: south_weight},
+          {location: new google.maps.LatLng(1.286428, 103.783572), weight: south_weight},
+          {location: new google.maps.LatLng(1.297926, 103.813784), weight: south_weight},
+          {location: new google.maps.LatLng(1.295695, 103.843139), weight: south_weight},
+          {location: new google.maps.LatLng(1.282480, 103.774989), weight: south_weight},
+          {location: new google.maps.LatLng(1.279048, 103.797820), weight: south_weight},
+          {location: new google.maps.LatLng(1.277332, 103.820651), weight: south_weight},
+          {location: new google.maps.LatLng(1.274243, 103.850005), weight: south_weight},
+          {location: new google.maps.LatLng(1.268751, 103.835757), weight: south_weight},
+          {location: new google.maps.LatLng(1.251418, 103.821168), weight: south_weight},
+          {location: new google.maps.LatLng(1.259461, 103.838162), weight: south_weight},
+          {location: new google.maps.LatLng(1.240754, 103.838677), weight: south_weight},
+
+          {location: new google.maps.LatLng(1.306680, 103.863027), weight: east_weight},
+          {location: new google.maps.LatLng(1.357183, 103.896238), weight: east_weight},
+          {location: new google.maps.LatLng(1.334141, 103.901193), weight: east_weight},
+          {location: new google.maps.LatLng(1.336544, 103.919046), weight: east_weight},
+          {location: new google.maps.LatLng(1.327620, 103.929174), weight: east_weight},
+          {location: new google.maps.LatLng(1.318009, 103.958185), weight: east_weight},
+          {location: new google.maps.LatLng(1.316979, 103.981531), weight: east_weight},
+          {location: new google.maps.LatLng(1.381506, 103.911665), weight: east_weight},
+          {location: new google.maps.LatLng(1.367262, 103.924368), weight: east_weight},
+          {location: new google.maps.LatLng(1.353533, 103.942735), weight: east_weight},
+          {location: new google.maps.LatLng(1.337058, 103.960932), weight: east_weight},
+          {location: new google.maps.LatLng(1.314062, 104.000929), weight: east_weight},
+          {location: new google.maps.LatLng(1.328993, 103.989599), weight: east_weight},
+          {location: new google.maps.LatLng(1.343408, 103.976038), weight: east_weight},
+          {location: new google.maps.LatLng(1.360741, 103.965051), weight: east_weight},
+          {location: new google.maps.LatLng(1.377793, 103.954353), weight: east_weight},
+          {location: new google.maps.LatLng(1.385160, 103.974272), weight: east_weight},
+          {location: new google.maps.LatLng(1.353926, 103.992468), weight: east_weight},
+          {location: new google.maps.LatLng(1.323379, 104.010321), weight: east_weight},
+          {location: new google.maps.LatLng(1.356672, 104.024225), weight: east_weight},
+
+          {location: new google.maps.LatLng(1.340381, 103.708878), weight: west_weight},
+          {location: new google.maps.LatLng(1.316184, 103.764839), weight: west_weight},
+          {location: new google.maps.LatLng(1.329181, 103.735855), weight: west_weight},
+          {location: new google.maps.LatLng(1.401475, 103.750935), weight: west_weight},
+          {location: new google.maps.LatLng(1.384057, 103.746901), weight: west_weight},
+          {location: new google.maps.LatLng(1.359087, 103.763638), weight: west_weight},
+          {location: new google.maps.LatLng(1.357374, 103.744962), weight: west_weight},
+          {location: new google.maps.LatLng(1.327345, 103.681954), weight: west_weight},
+          {location: new google.maps.LatLng(1.348447, 103.683128), weight: west_weight},
+          {location: new google.maps.LatLng(1.315841, 103.681881), weight: west_weight},
+          {location: new google.maps.LatLng(1.299365, 103.665230), weight: west_weight},
+          {location: new google.maps.LatLng(1.364631, 103.659888), weight: west_weight},
+          {location: new google.maps.LatLng(1.333569, 103.638602), weight: west_weight},
+          {location: new google.maps.LatLng(1.289543, 103.667043), weight: west_weight},
+          {location: new google.maps.LatLng(1.293233, 103.631424), weight: west_weight},
+          {location: new google.maps.LatLng(1.266659, 103.619721), weight: west_weight},
+          {location: new google.maps.LatLng(1.300006, 103.736148), weight: west_weight},
+          {location: new google.maps.LatLng(1.341108, 103.718896), weight: west_weight},
+          {location: new google.maps.LatLng(1.338579, 103.730335), weight: west_weight},
+          {location: new google.maps.LatLng(1.351997, 103.719957), weight: west_weight},
+
+          {location: new google.maps.LatLng(1.359322, 103.778964), weight: central_weight},
+          {location: new google.maps.LatLng(1.353031, 103.794338), weight: central_weight},
+          {location: new google.maps.LatLng(1.353717, 103.808929), weight: central_weight},
+          {location: new google.maps.LatLng(1.354747, 103.824808), weight: central_weight},
+          {location: new google.maps.LatLng(1.353889, 103.847381), weight: central_weight},
+          {location: new google.maps.LatLng(1.349083, 103.873469), weight: central_weight},
+          {location: new google.maps.LatLng(1.344328, 103.894165), weight: central_weight},
+          {location: new google.maps.LatLng(1.344242, 103.875110), weight: central_weight},
+          {location: new google.maps.LatLng(1.343212, 103.865326), weight: central_weight},
+          {location: new google.maps.LatLng(1.332916, 103.854854), weight: central_weight},
+          {location: new google.maps.LatLng(1.331886, 103.866828), weight: central_weight},
+          {location: new google.maps.LatLng(1.326952, 103.875024), weight: central_weight},
+          {location: new google.maps.LatLng(1.323176, 103.881290), weight: central_weight},
+          {location: new google.maps.LatLng(1.329612, 103.882363), weight: central_weight},
+          {location: new google.maps.LatLng(1.334074, 103.879273), weight: central_weight},
+          {location: new google.maps.LatLng(1.338321, 103.875926), weight: central_weight},
+          {location: new google.maps.LatLng(1.322318, 103.878715), weight: central_weight},
+          {location: new google.maps.LatLng(1.329011, 103.881891), weight: central_weight},
+          {location: new google.maps.LatLng(1.331628, 103.849147), weight: central_weight}
+
+
+
+
+          // new google.maps.LatLng(1.375766, 104.860922)
+        ];
+        }
+      }
+
+    </script>
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyALaKPulTaLLRH8u-Q8EGhPxnGhVMar1ZY&libraries=visualization&callback=initMap">
+    </script>
+
+    <!-- <form id="Date_form"> -->
+    <!-- <div class = date>
+    <label for="start">date:</label>
+
+    <input type="date" id="start" name="selected_date"
+           value="2020-03-22"
+           min="2020-01-01" max="2020-04-30">
+    </div> -->
+    <!-- </form> -->
+
+
+    <div class="main">
+    <form class="searchDetails" action="{{ url_for('PSI') }}" method="post">
+
+
+
+    <form class="searchDetails">
+
+
+
+
+      <script>
+          // document.addEventListener('DOMContentLoaded', function() {
+          //     document.querySelector('#form').onsubmit = function() {
+          //         const name = document.querySelector('#selected_location').value;
+          //         alert(`Hello ${name}!`);
+          //         return false;
+          //     };
+          // });
+      </script>
+
+
+    </form>
+
+    </div>
+
+
+
+    <div class="login-box1" >
+
+    <!-- <img src="{{ url_for('static', filename='avatar.png') }}" class="avatar"> -->
+        <h1 style="padding-bottom: 20px;"><center>Input</center></h1>
+        <br>
+
+            <form action="{{ url_for('check_psi') }}" method="post">
+
+
+
+            <p><center>Location</center></p>
+        <center>    <select name="selected_location" id="selected_location" class="drop-down-box"></center>
+                <option>{{selected_location}}</option>
+                    <option> Admirality</option>
+                    <option> Kranji </option>
+                    <option> Woodlands</option>
+                    <option> Sembawang</option>
+                    <option> Yishun</option>
+                    <option> Yio Chu Kang</option>
+                    <option> Seletar</option>
+                    <option> Sengkang</option>
+                    <option> Holland</option>
+                    <option> Queenstown</option>
+                    <option> Bukit Merah</option>
+                    <option> Telok Blangah</option>
+                    <option> Pasir Panjang</option>
+                    <option> Sentosa</option>
+                    <option> Bukit Timah</option>
+                    <option> Newton</option>
+                    <option> Orchard</option>
+                    <option> City</option>
+                    <option>Marina South </option>
+                    <option> Serangoon</option>
+                    <option> Punggol</option>
+                    <option> Tampines</option>
+                    <option> Pasir Ris</option>
+                    <option> Loyang</option>
+                    <option> Simei</option>
+                    <option> Kallang</option>
+                    <option> Katong</option>
+                    <option> East Coast</option>
+                    <option> Macpherson</option>
+                    <option> Bedok</option>
+                    <option> Pulau Ubin</option>
+                    <option> Pulau Tekong</option>
+                    <option> Lim Chu Kang</option>
+                    <option> Choa Chu Kang</option>
+                    <option> Bukit Panjang</option>
+                    <option> Tuas</option>
+                    <option> Jurong East</option>
+                    <option> Jurong West</option>
+                    <option> Jurong Industrial Estate</option>
+                    <option> Bukit Batok</option>
+                    <option> Hillview</option>
+                    <option> West Coast</option>
+                    <option> Clementi</option>
+                    <option> Thomson</option>
+                    <option> Marymount</option>
+                    <option> Sin Ming</option>
+                    <option> Ang Mo Kio</option>
+                    <option> Bishan</option>
+                    <option> Serangoon Gardens</option>
+                    <option> MacRitchie</option>
+                    <option> Toa Payoh</option>
+                  </select>
+
+            <!-- <input type="text" name="Name" placeholder="Enter Name"> -->
+            <br>
+             <!-- <div class = date> -->
+            <!-- <label for="start">date:</label>
+              value="2020-03-22" -->
+
+
+
+
+             <div class = "date2" >
+              <p><center>Date</center></p>
+
+
+
+            <label for="start"></label>
+
+            <input type="date" class="start" name="selected_date"
+                   value={{selected_date}}
+                   min="2020-01-01" max="2020-05-06">
+             <input type="submit" value="Submit">
+            </div>
+              <br><br><br><br><br><br><br>
+
+
+            </div>
+
+            <!-- <p>Date</p> -->
+            <!-- <input type="text" name="username" placeholder="Enter Username"> -->
+
+
+            <!-- <br><br><br><br><br><br><br><br><br><br> -->
+          </form>
+        </div>
+
+
+
+
+        <!-- <button class="simplepicker-btn">Show Picker</button> -->
+          <!-- <div class="event-log">Event logs:<br></div> -->
+
+          <!-- <script src="static/simplepicker.js"></script>
+          <script>
+            let simplepicker = new SimplePicker({
+              zIndex: 10
+            }); -->
+
+            <!-- // simplepicker.open();
+
+            const $button = document.querySelector('button');
+            const $eventLog = document.querySelector('.event-log');
+            $button.addEventListener('click', (e) => {
+              simplepicker.open();
+            });
+
+            // $eventLog.innerHTML += '\n\n';
+            simplepicker.on('submit', (date, readableDate) => {
+              $eventLog.innerHTML += readableDate + '\n';
+            });
+
+            // simplepicker.on('close', (date) => {
+            //   $eventLog.innerHTML += 'Picker Closed'  + '\n';
+            // });
+          </script> -->
+
+
+
+                 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+                 <script src="http://www.jacklmoore.com/colorbox/jquery.colorbox.js"></script>
+                 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+                 <script>
+                   function openColorBox(){
+                     $.colorbox({iframe:true, width:"80%", height:"80%", href: "http://www.sitepoint.com"});
+                   }
+
+                   function countDown(){
+                     seconds--
+                     $("popup1").text(seconds);
+                     if (seconds === 0 && {{show_alert}} == 1){
+                       // openColorBox();
+                       // alert("hello")
+                       Swal.fire({
+                         title: "PSI Value:{{psi_result}} \n Status:{{status}}",
+                         text: "{{comments}}",
+                         icon: 'success',
+                         showCancelButton: true,
+                         showLoaderOnConfirm: true,
+                         preConfirm: function() {
+                           return new Promise(function(resolve, reject) {
+                             // here should be AJAX request
+                             setTimeout(function() {
+                               resolve();
+                             }, 1000);
+                           });
+                         },
+                       }).then(function() {
+                         Swal.fire('Stay safe !!!');
+                       });
+
+                       // swal("Here's a message!", "It's pretty, isn't it?");
+                       clearInterval(i);
+                     }
+                   }
+
+                   var seconds = 1,
+                       i = setInterval(countDown, 1000);
+                 </script>
+
+
+
+
+
+  </body>
+</html>
